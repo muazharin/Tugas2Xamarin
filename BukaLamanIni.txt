@@ -1,0 +1,4 @@
+https://developer.xamarin.com/guides/android/getting_started/installation/set_up_device_for_development/
+https://dzone.com/articles/xamarin-how-set-android-device
+https://developer.android.com/studio/run/oem-usb.html#Drivers
+https://code.tutsplus.com/articles/connecting-physical-android-devices-to-your-development-machine--mobile-12376

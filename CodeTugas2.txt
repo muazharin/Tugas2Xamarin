@@ -1,0 +1,199 @@
+--------------------------------------------------------Menu.xaml---------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tugas2.Menu">
+    <ListView ItemsSource="{Binding ListItems}" ItemTapped="listview_ItemTapped">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ImageCell ImageSource="{Binding Source}" Text="{Binding Title}" TextColor="Aqua" Detail="{Binding Description}" />
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>
+
+--------------------------------------------------------Menu.xaml.cs------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tugas2.Models;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Tugas2
+{
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class Menu : ContentPage
+	{
+		public Menu ()
+		{
+			InitializeComponent ();
+		        BindingContext = new ListView();
+        	}
+        	private async void listview_ItemTapped(object sender, ItemTappedEventArgs e)
+        	{
+        	    ListItems item = (ListItems)e.Item;
+        	    await Navigation.PushAsync(new Contain(item.Title));
+        	}
+        	public class ListView : BindableObject
+        	{
+        	    private List<ListItems> listItems;
+        	    public INavigation Navigation { get; }
+        	    public List<ListItems> ListItems
+        	    {
+        	        get { return listItems; }
+        	        set
+        	        {
+        	            listItems = value;
+        	            OnPropertyChanged("ListItems");
+        	        }
+        	    }
+        	public ListView()
+            	{
+                	listItems = new List<ListItems>
+                	{
+                	    new ListItems{Source="calya.png",Title="Calya", Description="Angsuran Mulai Rp. 2.405.000" },
+                	    new ListItems {Source="karimun.png",Title="Karimun Wagon R", Description="Angsuran Mulai Rp. 2.800.000" },
+                	    new ListItems {Source="sigra.png",Title="Sigra", Description="Angsuran Mulai Rp. 2.533.000" },
+                	    new ListItems {Source="brv.png",Title="BR-V", Description="Angsuran Mulai Rp. 5.435.000" },
+                	    new ListItems {Source="goplus.png",Title="GO+", Description=" " },
+                	    new ListItems {Source="mirage.png",Title="Mirage", Description="Angsuran Mulai Rp. 4.471.616" }
+                		};
+        	    	}
+	        }
+	}
+}
+
+--------------------------------------------------------Contain.xaml------------------------------------------------------
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Tugas2.Contain">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical">
+            <Label x:Name="lblParam" Text="" FontSize="35" FontAttributes="Bold"/>
+            <Image x:Name="picture" Source="brv.png"/>
+            <Label x:Name="lblParam2" Text="Info:" FontSize="Medium" FontAttributes="Bold"/>
+            <Label x:Name="lblParam3" Text="" FontSize="Default" />
+            <Button x:Name="btnBack" Text="Back"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
+
+--------------------------------------------------------Contain.xaml.cs---------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Tugas2.Models;
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Tugas2
+{
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class Contain : ContentPage
+	{
+		public Contain (string param)
+        {
+			InitializeComponent ();
+            lblParam.Text = param;
+            if (lblParam.Text.Equals("BR-V"))
+            {
+                picture.Source = "brv.png";
+                lblParam3.Text = "CUV 1500 cc Bensin 7 Penumpang";
+            }
+            else if(lblParam.Text.Equals("Calya"))
+            {
+                picture.Source = "calya.png";
+                lblParam3.Text = "CUV 1000 cc Bensin 7 Penumpang";
+            }
+            else if (lblParam.Text.Equals("Karimun Wagon R"))
+            {
+                picture.Source = "karimun.png";
+                lblParam3.Text = "Hatchback 1000 cc Bensin 5 Penumpang";
+            }
+            else if (lblParam.Text.Equals("Sigra"))
+            {
+                picture.Source = "sigra.png";
+                lblParam3.Text = "Sigra 1000 cc Bensin 5 Penumpang";
+            }
+            else if (lblParam.Text.Equals("GO+"))
+            {
+                picture.Source = "goplus.png";
+                lblParam3.Text = "Goplus 1000 cc Bensin 5 Penumpang";
+            }else
+            {
+                picture.Source = "mirage.png";
+                lblParam3.Text = "Mirage 1000 cc Bensin 5 Penumpang";
+            }
+            btnBack.Clicked += async (sender, e) =>
+            {
+                await Navigation.PopAsync(true);
+            };
+        }
+    }
+}
+
+--------------------------------------------------------ListItem.cs-------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+
+using Xamarin.Forms;
+
+namespace Tugas2.Models
+{
+	public class ListItems
+	{
+        public string Source { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+	}
+}
+
+--------------------------------------------------------App.xaml.cs-------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Tugas2
+{
+	public partial class App : Application
+	{
+		public App ()
+		{
+            MainPage = new NavigationPage(new Menu());
+		}
+
+		protected override void OnStart ()
+		{
+			// Handle when your app starts
+		}
+
+		protected override void OnSleep ()
+		{
+			// Handle when your app sleeps
+		}
+
+		protected override void OnResume ()
+		{
+			// Handle when your app resumes
+		}
+	}
+}
